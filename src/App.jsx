@@ -5,6 +5,7 @@ import Places from './components/Places.jsx'
 
 function App() {
 
+
   return (
     <>
     <header>
@@ -13,9 +14,17 @@ function App() {
       <p>Create your personal collection of places you would like to visit or you have visited.</p>
     </header>
     <main>
-      <Places title="I'd like to visit . . . ">
+      <Places title="I'd like to visit . . . "
+      places={[]}
+      fallbackText={'Select the places you would like to visit below.'}
+       
+      >
       </Places>
-      <Places title="Available Places">
+      <Places 
+      title="Available Places"
+      places={AVAILABLE_PLACES}
+      fallbackText={'Showing places according to places..'}
+      >
       </Places>
     </main>
     </>
