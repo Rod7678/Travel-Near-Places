@@ -1,33 +1,23 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import logo from './assets/logo.png'
+import { AVAILABLE_PLACES } from './data.js'
+import Places from './components/Places.jsx'
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+    <header>
+      <img src={logo} alt="Styled globe" />
+      <h1>placepicker</h1>
+      <p>Create your personal collection of places you would like to visit or you have visited.</p>
+    </header>
+    <main>
+      <Places title="I'd like to visit . . . ">
+      </Places>
+      <Places title="Available Places">
+      </Places>
+    </main>
     </>
   )
 }
