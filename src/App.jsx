@@ -1,14 +1,31 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import logo from './assets/logo.png'
 import { AVAILABLE_PLACES } from './data.js'
 import Places from './components/Places.jsx'
 import Modal from './components/Modal.jsx'
 import ConfirmDeletion from './components/ConfirmDeletion.jsx'
+import { sortPlacesByDistance } from './loc.js'
+
+
+const storedIds = JSON.parse(localStorage.getItem('selectedPlaces')) || [];
+const storedSelectedPlace = storedIds.map((id)=>
+  AVAILABLE_PLACES.find((place) => place.id === id)
+)
 
 function App() {
   const modal = useRef()
   const selectedPlace =  useRef()
-  const [pickedPlaces, setPickedPlaces] = useState([]);
+  const [availablePlaces, setAvailablePlaces] = useState([])
+  const [pickedPlaces, setPickedPlaces] = useState(storedSelectedPlace);
+
+
+  useEffect(()=>{
+    navigator.geolocation.getCurrentPosition((position)=>{
+      const sortedPlaces = sortPlacesByDistance(AVAILABLE_PLACES, position.coords.latitude, position.coords.longitude);
+
+      setAvailablePlaces(sortedPlaces);
+    })
+  })
 
   function handleStartRemove(id){
     modal.current.open();
@@ -28,6 +45,12 @@ function App() {
       const place = AVAILABLE_PLACES.find((place)=> place.id === id);
       return [place, ...prevSelected];
     })
+
+    const storedIds = JSON.parse(localStorage.getItem('selectedPlaces')) || [];
+    if(storedIds.indexOf(id) === -1){
+      localStorage.setItem('selectedPlaces', JSON.stringify([id, ...storedIds]));
+    }
+
   }
 
   function handeleRemovePlace(){
@@ -35,6 +58,10 @@ function App() {
       prevPickedPlace.filter((place)=>place.id !== selectedPlace.current)
     )
     modal.current.close();
+    
+    
+    const storedIds = JSON.parse(localStorage.getItem('selectedPlaces')) || [];
+    localStorage.setItem('selectedPlaces', JSON.stringify(storedIds.filter((id)=> id !== selectedPlace.current)))
   }
 
   return (
@@ -55,7 +82,7 @@ function App() {
       />
       <Places 
       title="Available Places"
-      places={AVAILABLE_PLACES}
+      places={availablePlaces}
       fallbackText={'Showing places according to places..'}
       onSelectPlace ={handleSelectPlace}
       />
