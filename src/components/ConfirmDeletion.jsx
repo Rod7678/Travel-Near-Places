@@ -9,7 +9,7 @@ export default function ConfirmDeletion({onConfirm, onCancel}){
         return ()=>{
             clearTimeout(timer)
         }
-    },[])
+    },[onConfirm])
 
 
     return (

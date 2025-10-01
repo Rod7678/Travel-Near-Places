@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import logo from './assets/logo.png'
 import { AVAILABLE_PLACES } from './data.js'
 import Places from './components/Places.jsx'
@@ -54,7 +54,7 @@ function App() {
 
   }
 
-  function handeleRemovePlace(){
+  const handeleRemovePlace =  useCallback(function handeleRemovePlace(){
     setPickedPlaces((prevPickedPlace)=>
       prevPickedPlace.filter((place)=>place.id !== selectedPlace.current)
     )
@@ -63,7 +63,7 @@ function App() {
     
     const storedIds = JSON.parse(localStorage.getItem('selectedPlaces')) || [];
     localStorage.setItem('selectedPlaces', JSON.stringify(storedIds.filter((id)=> id !== selectedPlace.current)))
-  }
+  }, [])
 
   return (
     <>
